@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>簡易ATM</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>簡易ATM</h1>
+
+        <!-- メッセージ表示 -->
+        <span th:class="${'message ' + ((message != null && (#strings.contains(message, '残高不足') || #strings.contains(message, 'エラー'))) ? 'error' : 'normal')}"
+              th:text="${message}">メッセージがここに表示されます</span>
+
+        <!-- 残高表示 -->
+        <div class="balance" th:text="${balance}">残高：0円</div>
+
+        <!-- 入金フォーム -->
+        <form action="/deposit" method="post">
+            <input type="number" name="amount" placeholder="入金額" min="1" max="1000000000" required>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit">入金</button>
+        </form>
+
+        <!-- 出金フォーム -->
+        <form action="/withdraw" method="post">
+            <input type="number" name="amount" placeholder="出金額" min="1" max="1000000000" required>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit">出金</button>
+        </form>
+
+        <!-- 残高照会ボタン -->
+        <a th:href="@{/balance}">
+            <button type="button">残高照会</button>
+        </a>
+
+        <!-- ログアウトフォーム -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">ログアウト</button>
+        </form>
+    </div>
+</body>
+</html>
